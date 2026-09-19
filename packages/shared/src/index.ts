@@ -32,6 +32,7 @@ export const SendAsBotInputSchema = z.object({
   targetToken: z.string().min(1),
   rootMessageId: z.string().optional(),
   broadcast: z.boolean().default(false),
+  plainText: z.string().min(1),
 });
 
 export type SendAsBotInput = z.infer<typeof SendAsBotInputSchema>;

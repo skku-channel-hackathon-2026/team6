@@ -92,6 +92,7 @@ function Send() {
               targetToken,
               broadcast,
               rootMessageId,
+              plainText: message,
             }
             await sendAsBot(input)
             break

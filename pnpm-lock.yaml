@@ -80,6 +80,9 @@ importers:
       '@channel.io/bezier-react':
         specifier: 4.0.0-next.14
         version: 4.0.0-next.14(@channel.io/bezier-icons@0.60.0(react@18.3.1))(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@channel.io/channel-web-sdk-loader':
+        specifier: ^2.0.2
+        version: 2.0.2
       '@tutorial/shared':
         specifier: workspace:*
         version: link:../packages/shared
@@ -278,6 +281,9 @@ packages:
 
   '@channel.io/bezier-tokens@1.0.0-next.5':
     resolution: {integrity: sha512-kVhnvNo5H0W7H1zU93Co31PFDCoXvTTxb3vp8jHY9B2mif2VJ3pbImyg0PxEtYnHjgWDcSq+MPsxJsmelA1EBA==}
+
+  '@channel.io/channel-web-sdk-loader@2.0.2':
+    resolution: {integrity: sha512-43xRJX+BUjb5vRw5A/LDkgE9syJYTPERf7xo49Fz5MMpA9UtzPWHWyzN2QU1/tTT2uu5tpxapT2BgMx6FfP2qg==}
 
   '@cloudflare/kv-asset-handler@0.5.0':
     resolution: {integrity: sha512-jxQYkj8dSIzc0cD6cMMNdOc1UVjqSqu8BZdor5s8cGjW2I8BjODt/kWPVdY+u9zj3ms75Q5qaZgnxUad83+eAg==}
@@ -3007,6 +3013,8 @@ snapshots:
       - '@types/react-dom'
 
   '@channel.io/bezier-tokens@1.0.0-next.5': {}
+
+  '@channel.io/channel-web-sdk-loader@2.0.2': {}
 
   '@cloudflare/kv-asset-handler@0.5.0': {}
 

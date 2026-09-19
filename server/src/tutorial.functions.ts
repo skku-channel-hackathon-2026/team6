@@ -32,7 +32,6 @@ import {
 } from "./target-token.js";
 
 const tutorialMessage = "This is a test message sent by a manager.";
-const botMessage = "This is a test message sent by a bot.";
 
 @Extension({ name: "command", systemVersion: "v1" })
 export class CommandExtension {
@@ -146,8 +145,8 @@ export class TutorialFunctions {
         rootMessageId: input.rootMessageId,
         broadcast: input.broadcast,
         dto: {
-          plainText: botMessage,
-          botName: "AppTutorialBot",
+          plainText: input.plainText,
+          botName: "수업사이",
         },
       });
     } catch {

@@ -11,6 +11,26 @@ for (const path of ["/api/health", "/api/ready"]) {
 }
 const body =
   '{ "method": "extension.command.metadata.getCommands", "params": {} }';
+// The new read-only demo route is public; Channel functions below remain signed.
+const activities = await fetch(
+  origin + "/api/activities?scope=today&date=2026-09-19",
+);
+assert.equal(activities.status, 200);
+const activityData = await activities.json();
+assert(Array.isArray(activityData.classes));
+assert(Array.isArray(activityData.activities));
+const mine = await fetch(origin + "/api/activities?scope=mine");
+assert.equal(mine.status, 200);
+const mineData = await mine.json();
+assert(Array.isArray(mineData.activities));
+assert(
+  mineData.activities.every((activity) =>
+    Array.isArray(activity.mySelectedUserIds),
+  ),
+);
+for (const query of ["scope=unknown", "scope=today&date=2026-02-30"]) {
+  assert.equal((await fetch(origin + "/api/activities?" + query)).status, 400);
+}
 const signature = createHmac("sha256", Buffer.from("11".repeat(32), "hex"))
   .update(body)
   .digest("base64");
@@ -45,5 +65,5 @@ assert(assets.length >= 2);
 for (const asset of assets)
   assert.equal((await fetch(new URL(asset, wam.url))).status, 200);
 console.log(
-  "PASS: Workers HTTP adapter, signed concurrent calls, invalid/tampered signatures, D1 readiness, WAM and static assets",
+  "PASS: public activities API, Workers HTTP adapter, signed concurrent calls, invalid/tampered signatures, D1 readiness, WAM and static assets",
 );
