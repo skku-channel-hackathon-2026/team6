@@ -1,10 +1,12 @@
+> **자동 DB 마이그레이션:** 팀 레포 PR 머지 → main CI 성공 → 미적용 SQL 원격 D1 적용 → 앱 배포. SQL 실패 시 앱 배포를 중단합니다. 적용한 SQL은 수정하지 말고 새 파일을 추가하세요.
+
 # Channel App tutorial — TypeScript
 
 **SKKU 2026 team6** · [이 팀의 리소스와 준비 상태](TEAM.md)
 
 > **성균관대 해커톤 팀 개발 안내**: [시작하기·배포·DB 마이그레이션](HACKATHON.ko.md) · [Desk 검증 기록](docs/desk-qa.md)
 > GitHub Write, 앱 개발 권한, 전용 채널 초대를 수락한 뒤 위 가이드부터 확인하세요.
-> `main` push는 코드 배포 대상이며, 원격 DB 마이그레이션과 익스텐션 등록 갱신은 운영진에게 별도로 요청합니다.
+> `main` push는 코드 배포 대상이며, 원격 DB 마이그레이션은 main CI 성공 후 자동 적용되며, 익스텐션 등록 갱신은 운영진에게 요청합니다.
 
 [English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md)
 

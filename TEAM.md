@@ -19,5 +19,5 @@
 기존 `docs/desk-qa.md`는 team1 파일럿 기록입니다.
 
 [개발·DB 마이그레이션 안내](HACKATHON.ko.md)를 확인하세요.
-DB 스키마 변경은 `cloudflare/migrations/`의 SQL로 관리하며 원격 적용은 운영자가 수행합니다.
+DB 스키마 변경은 `cloudflare/migrations/`의 새 SQL로 관리합니다. main CI 성공 후 원격 D1 마이그레이션 → 앱 배포가 자동 실행되며, SQL 실패 시 앱 배포는 중단됩니다.
 팀장 초대는 이메일·GitHub ID 수집 후 진행합니다.
