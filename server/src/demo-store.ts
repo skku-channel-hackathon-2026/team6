@@ -38,6 +38,7 @@ type DemoState = {
   activities: DemoActivity[];
   preferences: Record<string, string[]>;
 };
+let memoryState: DemoState | null = null;
 
 type CreateInput = {
   classId: string;
@@ -128,36 +129,55 @@ function initialState(): DemoState {
 }
 
 async function save(database: AppDatabase, state: DemoState) {
-  await database
-    .prepare(
-      `
+  memoryState = state;
+
+  try {
+    await database
+      .prepare(
+        `
         INSERT INTO app_records (id, value_json, updated_at)
         VALUES (?, ?, CURRENT_TIMESTAMP)
         ON CONFLICT(id) DO UPDATE SET
-            value_json = excluded.value_json,
-            updated_at = CURRENT_TIMESTAMP
+          value_json = excluded.value_json,
+          updated_at = CURRENT_TIMESTAMP
         `,
-    )
-    .bind(STATE_ID, JSON.stringify(state))
-    .run();
+      )
+      .bind(STATE_ID, JSON.stringify(state))
+      .run();
+  } catch {
+    // 원격 D1 테이블이 없어도 데모는 메모리 상태로 계속 동작
+  }
 }
 
 async function load(database: AppDatabase): Promise<DemoState> {
-  const row = await database
-    .prepare("SELECT value_json FROM app_records WHERE id = ?")
-    .bind(STATE_ID)
-    .first<{ value_json: string }>();
+  try {
+    const row = await database
+      .prepare("SELECT value_json FROM app_records WHERE id = ?")
+      .bind(STATE_ID)
+      .first<{ value_json: string }>();
 
-  if (row) {
-    try {
-      return JSON.parse(row.value_json) as DemoState;
-    } catch {
-      // 아래에서 초기 상태로 복구
+    if (row) {
+      const state = JSON.parse(row.value_json) as DemoState;
+      memoryState = state;
+      return state;
     }
+  } catch {
+    // D1 미구성 시 아래 메모리 fallback 사용
+  }
+
+  if (memoryState) {
+    return memoryState;
   }
 
   const state = initialState();
-  await save(database, state);
+  memoryState = state;
+
+  try {
+    await save(database, state);
+  } catch {
+    // ignore
+  }
+
   return state;
 }
 
