@@ -15,7 +15,15 @@ import {
 } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
 import { getDatabase, type AppDatabase } from "./database.js";
-
+import {
+  demoCompleteActivity,
+  demoCreateActivity,
+  demoListMine,
+  demoListToday,
+  demoRemoveActivity,
+  demoSetParticipation,
+  demoSetPreference,
+} from "./demo-store.js";
 // Demo endpoints: never accept the acting user from request input.
 export const DEMO_USER_ID = "me";
 type ActivityRow = {
@@ -486,12 +494,12 @@ export async function listTodayActivities(database: AppDatabase, date: string) {
 export class ActivitiesController {
   @Post()
   create(@Body() body: unknown) {
-    return createActivity(getDatabase(), parseCreateInput(body));
+    return demoCreateActivity(getDatabase(), parseCreateInput(body));
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return removeActivity(getDatabase(), id);
+    return demoRemoveActivity(getDatabase(), id);
   }
 
   @Put(":id/preferences/:targetUserId")
@@ -510,7 +518,8 @@ export class ActivitiesController {
     ) {
       throw new BadRequestException("body must be { selected: boolean }");
     }
-    return setPreference(getDatabase(), id, targetUserId, body.selected);
+
+    return demoSetPreference(getDatabase(), id, targetUserId, body.selected);
   }
 
   @Patch(":id")
@@ -525,7 +534,8 @@ export class ActivitiesController {
     ) {
       throw new BadRequestException("body must be { status: 'completed' }");
     }
-    return completeActivity(getDatabase(), id);
+
+    return demoCompleteActivity(getDatabase(), id);
   }
 
   @Put(":id/participation")
@@ -540,15 +550,22 @@ export class ActivitiesController {
     ) {
       throw new BadRequestException("body must be { joined: boolean }");
     }
-    return setParticipation(getDatabase(), id, body.joined);
+
+    return demoSetParticipation(getDatabase(), id, body.joined);
   }
 
   @Get()
   list(@Query("scope") scope: unknown, @Query("date") inputDate: unknown) {
-    if (scope === "mine") return listMyActivities(getDatabase());
-    if (scope !== "today")
+    if (scope === "mine") {
+      return demoListMine(getDatabase());
+    }
+
+    if (scope !== "today") {
       throw new BadRequestException("scope must be today or mine");
+    }
+
     const date = inputDate === undefined ? todayInSeoul() : inputDate;
+
     if (
       typeof date !== "string" ||
       !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
@@ -557,6 +574,7 @@ export class ActivitiesController {
     ) {
       throw new BadRequestException("date must be a valid YYYY-MM-DD date");
     }
-    return listTodayActivities(getDatabase(), date);
+
+    return demoListToday(getDatabase());
   }
 }

@@ -2,6 +2,7 @@ import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { useCallFunction } from '@channel.io/app-sdk-wam'
 import { TUTORIAL_FUNCTIONS, type SendAsBotInput } from '@tutorial/shared'
 import { useTutorialWamData } from './hooks/useTutorialWamData'
+import { useWamClose } from '@channel.io/app-sdk-wam'
 
 type Tab = '오늘' | '약속' | '마이'
 type Activity = {
@@ -39,6 +40,7 @@ type ActivitiesResponse = {
 }
 
 function App() {
+  const { close } = useWamClose()
   const { data: wamData } = useTutorialWamData()
 
   const { call: sendAsBot } = useCallFunction<void>({
@@ -425,7 +427,14 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        {/* <span className="brand">수업 사이</span> */}
+        <button
+          type="button"
+          className="close-button"
+          aria-label="닫기"
+          onClick={close}
+        >
+          ×
+        </button>
       </header>
       <main>
         <div className="page-heading">
